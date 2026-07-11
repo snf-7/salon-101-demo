@@ -4,19 +4,14 @@ import CustomerBooking from './CustomerBooking'
 import AdminDashboard from './AdminDashboard'
 import { createSeedBookings } from './bookingData'
 
-function PhoneColumn({ label, children, screenClassName }) {
-  return (
-    <div className="flex w-full max-w-[300px] flex-col items-center gap-3 sm:gap-4">
-      <p className="px-2 text-center text-xs font-medium leading-relaxed tracking-[0.06em] text-muted sm:text-sm">
-        {label}
-      </p>
-      <PhoneFrame screenClassName={screenClassName}>{children}</PhoneFrame>
-    </div>
-  )
-}
+const VIEWS = [
+  { id: 'customer', label: 'واجهة الزبون' },
+  { id: 'admin', label: 'لوحة الحلاق' },
+]
 
 function App() {
   const [bookings, setBookings] = useState(createSeedBookings)
+  const [activeView, setActiveView] = useState('customer')
 
   function handleBookingConfirmed(booking) {
     setBookings((current) => [booking, ...current])
@@ -35,28 +30,64 @@ function App() {
       />
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center px-3 py-8 sm:px-4 sm:py-14">
-        <header className="mb-8 w-full max-w-xl px-1 text-center sm:mb-14">
+        <header className="mb-8 w-full max-w-xl px-1 text-center sm:mb-10">
           <h1 className="font-display text-[1.55rem] font-bold leading-snug tracking-wide text-cream sm:text-3xl md:text-[2.75rem]">
             صالون ١٠١ — نظام الحجز
           </h1>
           <div className="mx-auto mt-4 h-px w-14 bg-gradient-to-l from-transparent via-brass/70 to-transparent sm:mt-5 sm:w-16" />
         </header>
 
-        {/* RTL: first item = right (customer), second = left (admin). Mobile: customer then admin. */}
-        <div className="flex w-full flex-col items-center justify-center gap-10 sm:gap-12 md:flex-row md:items-start md:gap-14">
-          <PhoneColumn
-            label="واجهة الزبون — الحجز"
-            screenClassName="bg-charcoal text-cream"
-          >
-            <CustomerBooking onBookingConfirmed={handleBookingConfirmed} />
-          </PhoneColumn>
+        <div
+          className="mb-8 inline-flex rounded-full bg-charcoal-raised p-1 ring-1 ring-white/10 sm:mb-10"
+          role="tablist"
+          aria-label="اختيار الواجهة"
+        >
+          {VIEWS.map((view) => {
+            const isActive = activeView === view.id
+            return (
+              <button
+                key={view.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveView(view.id)}
+                className={`rounded-full px-5 py-2 font-display text-sm font-semibold tracking-wide transition-all duration-300 sm:px-6 sm:text-base ${
+                  isActive
+                    ? 'bg-brass text-charcoal shadow-brass-glow'
+                    : 'text-muted hover:text-cream'
+                }`}
+              >
+                {view.label}
+              </button>
+            )
+          })}
+        </div>
 
-          <PhoneColumn
-            label="لوحة الحلاق — الإدارة"
-            screenClassName="bg-charcoal text-cream"
+        {/* Both phones stay mounted; inactive is CSS-hidden to preserve wizard + bookings state */}
+        <div className="relative flex w-full max-w-[300px] flex-col items-center">
+          <div
+            className={activeView === 'customer' ? 'w-full' : 'hidden'}
+            aria-hidden={activeView !== 'customer'}
           >
-            <AdminDashboard bookings={bookings} />
-          </PhoneColumn>
+            <p className="mb-3 px-2 text-center text-xs font-medium leading-relaxed tracking-[0.06em] text-muted sm:mb-4 sm:text-sm">
+              واجهة الزبون — الحجز
+            </p>
+            <PhoneFrame screenClassName="bg-charcoal text-cream">
+              <CustomerBooking onBookingConfirmed={handleBookingConfirmed} />
+            </PhoneFrame>
+          </div>
+
+          <div
+            className={activeView === 'admin' ? 'w-full' : 'hidden'}
+            aria-hidden={activeView !== 'admin'}
+          >
+            <p className="mb-3 px-2 text-center text-xs font-medium leading-relaxed tracking-[0.06em] text-muted sm:mb-4 sm:text-sm">
+              لوحة الحلاق — الإدارة
+            </p>
+            <PhoneFrame screenClassName="bg-charcoal text-cream">
+              <AdminDashboard bookings={bookings} />
+            </PhoneFrame>
+          </div>
         </div>
       </div>
     </div>
