@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply font-sans antialiased;
+  }
+
+  body {
+    @apply overflow-x-hidden bg-charcoal text-cream;
+  }
+
+  #root {
+    @apply min-h-screen overflow-x-hidden;
+  }
+}
+
+@keyframes booking-check-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes step-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes booking-new-flash {
+  0% {
+    box-shadow: 0 0 0 1px rgba(200, 161, 106, 0.85), 0 0 22px rgba(200, 161, 106, 0.45);
+    background-color: rgba(200, 161, 106, 0.16);
+  }
+  100% {
+    box-shadow: 0 8px 20px -12px rgba(0, 0, 0, 0.55);
+    background-color: #1c1915;
+  }
+}
+
+@keyframes welcome-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.booking-check-pop {
+  animation: booking-check-pop 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.step-enter {
+  animation: step-enter 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.booking-new-flash {
+  animation: booking-new-flash 1.4s ease-out both;
+}
+
+.welcome-enter {
+  animation: welcome-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.welcome-enter-delay-1 {
+  animation-delay: 0.05s;
+}
+
+.welcome-enter-delay-2 {
+  animation-delay: 0.14s;
+}
+
+.welcome-enter-delay-3 {
+  animation-delay: 0.22s;
+}
+
+.welcome-enter-delay-4 {
+  animation-delay: 0.3s;
+}
+
+.welcome-enter-delay-5 {
+  animation-delay: 0.38s;
+}
+
+.pressable {
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.pressable:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+@layer components {
+  .select-card {
+    @apply rounded-2xl border border-white/10 bg-charcoal-raised p-3.5 text-right shadow-card;
+  }
+
+  .select-card-active {
+    @apply border-brass bg-brass/10 shadow-brass-glow;
+  }
+
+  .chip {
+    @apply rounded-xl border border-white/10 bg-charcoal-raised px-2.5 py-2;
+  }
+
+  .chip-active {
+    @apply border-brass bg-brass/10 text-brass shadow-brass-glow;
+  }
+
+  .field-input {
+    @apply w-full rounded-2xl border border-white/10 bg-charcoal-raised px-3.5 py-3 text-sm text-cream shadow-none outline-none placeholder:text-muted focus:border-brass focus:shadow-brass-glow;
+  }
+
+  .primary-btn {
+    @apply w-full rounded-2xl bg-brass py-3.5 text-sm font-semibold tracking-wide text-charcoal shadow-card disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none;
+  }
+}
+
+.select-card,
+.chip,
+.primary-btn,
+.field-input {
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.select-card:active:not(:disabled),
+.chip:active:not(:disabled),
+.primary-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-check-pop,
+  .step-enter,
+  .booking-new-flash,
+  .welcome-enter {
+    animation: none;
+  }
+
+  .pressable,
+  .pressable:active:not(:disabled),
+  .select-card,
+  .chip,
+  .primary-btn,
+  .field-input,
+  .select-card:active:not(:disabled),
+  .chip:active:not(:disabled),
+  .primary-btn:active:not(:disabled) {
+    transition: none;
+    transform: none;
+  }
+}
